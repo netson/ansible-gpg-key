@@ -81,7 +81,7 @@ Providing either **fpr**, **file** or **content** is required
   gpg_key:
     fpr: 0D69E11F12BDBA077B3726AB4E1F799AA4FF2279
     keyserver: eu.pool.sks-keyservers.net
-	trust: '5'
+    trust: '5'
 ```
 ```YAML
 # delete a key from the target machine
