@@ -996,7 +996,7 @@ class GpgKey(object):
         lines = stdout.splitlines()
 
         # find gpg version
-        regex_gpg = r"gpg\s+\(GnuPG\)\s+(\d+\.\d+\.?\d*)$"
+        regex_gpg = r"gpg\s+\(GnuPG[^)]*\)\s+(\d+\.\d+\.?\d*)$"
         match_gpg = re.search(regex_gpg, lines[0])
 
         # sanity check
