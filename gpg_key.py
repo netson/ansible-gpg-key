@@ -1000,15 +1000,15 @@ class GpgKey(object):
         match_gpg = re.search(regex_gpg, lines[0])
 
         # sanity check
-        if re.compile(regex_gpg).groups < 1:
+        if match_gpg is None or match_gpg.group(1) is None:
             self.module.fail_json(msg="could not find a valid gpg version number in string [{}]".format(lines[0]))
 
         # find libgcrypt version
-        regex_libgcrypt = r"libgcrypt\s+(\d+\.\d+\.?\d*)$"
+        regex_libgcrypt = r"libgcrypt\s+(\d+\.\d+\.?\d*)"
         match_libgcrypt = re.match(regex_libgcrypt, lines[1])
 
         # sanity check
-        if re.compile(regex_libgcrypt).groups < 1:
+        if match_libgcrypt is None or match_libgcrypt.group(1) is None:
             self.module.fail_json(msg="could not find a valid libgcrypt version number in string [{}]".format(lines[1]))
 
         # check versions
