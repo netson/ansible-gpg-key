@@ -205,7 +205,6 @@ import re
 import os
 import time
 from ansible.module_utils.basic import AnsibleModule
-from packaging import version
 
 # class to import GPG keys
 class GpgKey(object):
@@ -986,6 +985,14 @@ class GpgKey(object):
         """
         self._vv("checking gnupg and libgcrypt versions")
 
+        req_gpg         = self.module.params["gpg_version"]
+        req_libgcrypt   = self.module.params["libgcrypt_version"]
+        if (not req_gpg or req_gpg is None) and ( not req_libgcrypt or req_libgcrypt is None):
+	    # nothing to check
+            self._vv("Skip checking versions, none specified")
+	    return True
+
+	from packaging import version
         # set command
         cmd = self.prepare_command("check", "versions")
 
@@ -1015,14 +1022,12 @@ class GpgKey(object):
         versions        =  {'gpg'       : match_gpg.group(1),
                             'libgcrypt' : match_libgcrypt.group(1),
                            }
-        req_gpg         = '2.1.17'
-        req_libgcrypt   = '1.8.1'
 
         # display minimum versions
         self._vv("gpg_key module requires at least gnupg version [{}] and libgcrypt version [{}]".format(versions['gpg'], versions['libgcrypt']))
 
         # sanity check
-        if version.parse(versions['gpg']) < version.parse(req_gpg) or version.parse(versions['libgcrypt']) < version.parse(req_libgcrypt):
+        if not (not req_gpg or req_gpg is None) and version.parse(versions['gpg']) < version.parse(req_gpg) or not (not req_libgcrypt or req_libgcrypt is None) and version.parse(versions['libgcrypt']) < version.parse(req_libgcrypt):
             self.module.fail_json(msg="gpg version [{}] and libgcrypt version [{}] are required; [{}] and [{}] given".format(req_gpg, req_libgcrypt, versions['gpg'], versions['libgcrypt']))
         else:
             self._vv("gnupg version [{}] and libgcrypt version [{}] detected".format(versions['gpg'], versions['libgcrypt']))
@@ -1511,6 +1516,8 @@ def main():
         state=dict(type='str', default='present', choices=['info', 'present', 'absent', 'latest']),
         gpgbin=dict(type='path', default=None),
         homedir=dict(type='path', default=None),
+        gpg_version=dict(type='str', required=False),
+        libgcrypt_version=dict(type='str', required=False),
     )
 
     # set mutually exclusive params

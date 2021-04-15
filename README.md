@@ -12,7 +12,7 @@ Looking for an easy and secure way to generate and store GPG keys for your ansib
 
 This module was created for use with GnuPG **v2.2.4+** (including libgcrypt **v1.8.1+**), which is the default on Ubuntu 18.04 images. The libgcrypt version is also checked because I also use Ed25519 keys, which is supported only by newer versions of libgcrypt. The module may also work on older versions, but it is untested. Also, some commands have changed between GnuGP version 1.x and 2.x and therefore are incompatible.
 
-To perform this version check, make sure python package ```packaging``` is installed on the target host:
+To perform this version check, specify at least one of the options gpg_version or libgcrypt_version **and** make sure python package ```packaging``` is installed on the target host:
 ```bash
 pip install packaging
 ```
@@ -41,6 +41,8 @@ Providing either **fpr**, **file** or **content** is required
 | **state** | | ```str``` | ```present```/ ```absent```/ ```latest```/ ```info``` | ```present``` | Key should be present, absent, latest (keyserver only) or info. Info only shows info for key given via fpr. Alternatively, you can use the special value * for the fpr to get a list of all installed keys and their relevant info. |
 | **gpgbin** | | ```path``` | | ```get_bin_path``` method to find gpg | Full path to GnuPG binary on target host |
 | **homedir** | | ```path``` | | ```None``` | Full path to the gpg homedir you wish to use; If none is provided, gpg will use the default homedir of ~/.gnupg Please be aware that this will be the user executing the module on the target host! So there will likely be a difference between running the module with and without become:yes! If you don't want to be surprised, set the path to the homedir with the variable. For more information on the GnuPG homedir, check https://www.gnupg.org/gph/en/manual/r1616.html |
+| **gpg_version** | ```False``` | ```str``` | | | Minimal GnuPG version. Needs packaging module. |
+| **libgcrypt_version** | ```False``` | ```str``` | | | Minimal libgcrypt version. Needs packaging module. |
 
 ## Examples
 
