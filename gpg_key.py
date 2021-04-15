@@ -923,8 +923,9 @@ class GpgKey(object):
         if action == "check" and state == "file":
             args = [
                 "--with-colons",
+                "--dry-run",
                 "--import-options",
-                "show-only",
+                "import-show",
                 "--import",
                 self.module.params["file"],
             ]
