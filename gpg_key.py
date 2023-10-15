@@ -319,7 +319,7 @@ class GpgKey(object):
             # check if key is installed
             installed = False
             for ik in self.installed_keys["keys"]:
-                if (fk["fingerprint"] == ik["fingerprint"] and
+                if (fk["fingerprint"].upper() == ik["fingerprint"].upper() and
                     fk["type"] == ik["type"] and
                     fk["key_capabilities"] == ik["key_capabilities"]
                    ):
@@ -400,7 +400,7 @@ class GpgKey(object):
         for index, fk in enumerate(keyinfo["keys"]):
             installed = False
             for ik in self.installed_keys["keys"]:
-                if (fk["fingerprint"] == ik["fingerprint"] and
+                if (fk["fingerprint".upper() == ik["fingerprint"].upper() and
                     fk["type"] == ik["type"] and
                     fk["key_capabilities"] == ik["key_capabilities"]
                    ):
@@ -464,7 +464,7 @@ class GpgKey(object):
             # check if key is installed
             installed = False
             for ik in self.installed_keys["keys"]:
-                if (fk["fingerprint"] == ik["fingerprint"] and
+                if (fk["fingerprint"].upper() == ik["fingerprint"].upper() and
                     fk["type"] == ik["type"] and
                     fk["key_capabilities"] == ik["key_capabilities"]
                    ):
@@ -553,7 +553,7 @@ class GpgKey(object):
         # check if key is installed
         for ik in self.installed_keys["keys"]:
 
-            if (fpr == ik["fingerprint"]):
+            if (fpr.upper() == ik["fingerprint"].upper()):
                     
                 # set keyinfo
                 self._vv("fingerprint [{}] already installed".format(fpr))
@@ -655,7 +655,7 @@ class GpgKey(object):
         # see if the key is installed or not
         # ik = installed key
         for ik in self.installed_keys["keys"]:
-            if fpr == ik["fingerprint"]:
+            if fpr.upper() == ik["fingerprint"].upper():
                 if ("state" in ik and ik["state"] != "absent") or ("state" not in ik):
                     keyinfo["fprs"].append(fpr)
                     keyinfo["keys"].append(ik)
@@ -838,7 +838,7 @@ class GpgKey(object):
             }
 
             for ik in self.installed_keys["keys"]:
-                if (fpr == ik["fingerprint"]):
+                if (fpr.upper() == ik["fingerprint"].upper()):
                     self._vv("fingerprint [{}] installed".format(fpr))
                     keyinfo["fprs"].append(fpr)
                     keyinfo["fprs"].append(ik)
