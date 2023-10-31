@@ -400,7 +400,7 @@ class GpgKey(object):
         for index, fk in enumerate(keyinfo["keys"]):
             installed = False
             for ik in self.installed_keys["keys"]:
-                if (fk["fingerprint".upper() == ik["fingerprint"].upper() and
+                if (fk["fingerprint"].upper() == ik["fingerprint"].upper() and
                     fk["type"] == ik["type"] and
                     fk["key_capabilities"] == ik["key_capabilities"]
                    ):
