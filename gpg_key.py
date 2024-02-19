@@ -107,6 +107,14 @@ options:
             https://www.gnupg.org/gph/en/manual/r1616.html
         default: None
         type: path
+    keyring:
+        description: |
+            Full path to the gpg keyring you wish to use; If none is provided,
+            gpg will use the default
+            For more information on the GnuPG keyring, check
+            https://www.gnupg.org/gph/en/manual/r1574.html
+        default: None
+        type: path
 
 author:
     - Rinck H. Sonnenberg (r.sonnenberg@netson.nl)
@@ -834,18 +842,18 @@ class GpgKey(object):
             keycount = 1
             keyinfo = {
                 "fprs": [],
-                "keys": [],
+                "keys": [{}],  # Initialize keys list with an empty dictionary
             }
 
             for ik in self.installed_keys["keys"]:
-                if (fpr.upper() == ik["fingerprint"].upper()):
-                    self._vv("fingerprint [{}] installed".format(fpr))
+                if fpr.upper() == ik["fingerprint"].upper():
+                    self._vv("Fingerprint [{}] installed".format(fpr))
                     keyinfo["fprs"].append(fpr)
-                    keyinfo["fprs"].append(ik)
+                    keyinfo["keys"].append(ik)
                     keyinfo["keys"][0]["state"] = "present"
                     keyinfo["keys"][0]["changed"] = False
                     installed = True
-                    continue
+                    break
 
             if not installed:
                 # set state
@@ -900,6 +908,11 @@ class GpgKey(object):
         if self.module.params["homedir"]:
             cmd.append("--homedir")
             cmd.append(self.module.params["homedir"])
+
+        # determine if keyring was set
+        if self.module.params["keyring"]:
+            cmd.append("--keyring")
+            cmd.append(self.module.params["keyring"])
 
         # check versions
         if action == "check" and state == "versions":
@@ -1513,6 +1526,7 @@ def main():
         state=dict(type='str', default='present', choices=['info', 'present', 'absent', 'latest']),
         gpgbin=dict(type='path', default=None),
         homedir=dict(type='path', default=None),
+        keyring=dict(type='path', default=None),
     )
 
     # set mutually exclusive params
