@@ -41,7 +41,8 @@ Providing either **fpr**, **file** or **content** is required
 | **state** | | ```str``` | ```present```/ ```absent```/ ```latest```/ ```info``` | ```present``` | Key should be present, absent, latest (keyserver only) or info. Info only shows info for key given via fpr. Alternatively, you can use the special value * for the fpr to get a list of all installed keys and their relevant info. |
 | **gpgbin** | | ```path``` | | ```get_bin_path``` method to find gpg | Full path to GnuPG binary on target host |
 | **homedir** | | ```path``` | | ```None``` | Full path to the gpg homedir you wish to use; If none is provided, gpg will use the default homedir of ~/.gnupg Please be aware that this will be the user executing the module on the target host! So there will likely be a difference between running the module with and without become:yes! If you don't want to be surprised, set the path to the homedir with the variable. For more information on the GnuPG homedir, check https://www.gnupg.org/gph/en/manual/r1616.html |
-
+| **keyring** | | ```path``` | | ```None``` | Full Full path to the gpg keyring you wish to use; If none is provided, gpg will use the default. For more information on the GnuPG keyring, check https://www.gnupg.org/gph/en/manual/r1574.html |
+            
 ## Examples
 
 ```YAML
@@ -103,6 +104,15 @@ Providing either **fpr**, **file** or **content** is required
   gpg_key:
     fpr: '*'
     state: info
+```
+```YAML
+# get keyinfo for a specific key in the keyring /etc/apt/trusted.gpg and save it to info
+- name: get keyinfo
+    gpg_key:
+    fpr: '15058500A0235D97F5D10063B188E2B695BD4743'
+    keyring: /etc/apt/trusted.gpg
+    state: info      
+    register: info
 ```
 
 ## Return values
