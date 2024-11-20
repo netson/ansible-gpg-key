@@ -768,7 +768,7 @@ class GpgKey(object):
 
             # see if any updates were downloaded or not
             # for some reason, gpg outputs these messages to stderr
-            updated = re.search('gpg:\s+unchanged: 1\n', stderr) is None
+            updated = re.search(r'gpg:\s+unchanged: 1\n', stderr) is None
             if updated:
                 updcnt += 1
 
